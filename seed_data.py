@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker, selectinload
 from database import engine
-from models import Base, User, Address, Product, Order
+from laba_python.app.models import Base, User, Address, Product, Order
 
 # Создаём таблицы если их нет
 print("Создаём таблицы...")
