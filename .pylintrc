@@ -1,0 +1,2 @@
+echo '[MESSAGES CONTROL]
+disable=invalid-name,missing-module-docstring,missing-class-docstring,missing-function-docstring,redundant-string-prefix,use-set-literal,use-tuple-unpacking,use-dict-get,use-builtin-super' > .pylintrcls app/controllers/

@@ -1,15 +1,15 @@
 import uuid
 from typing import List
 
-from litestar import Controller, get, post, put, delete
-from litestar.params import Parameter, Body
+from litestar import Controller, delete, get, post, put
 from litestar.exceptions import NotFoundException
+from litestar.params import Body, Parameter
 
 from app.schemas import (
     UserCreate,
-    UserUpdate,
-    UserResponse,
     UserListResponse,
+    UserResponse,
+    UserUpdate,
 )
 from app.services.user_service import UserService
 

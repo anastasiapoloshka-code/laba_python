@@ -1,36 +1,38 @@
-version: '3.8'
-
 services:
-  db:
-    image: postgres:15
-    container_name: my_postgres_db_persistent
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/test_db
+    ports:
+      - "8000:8000"
+    networks:
+      - test_db
+    restart: unless-stopped
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: test_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: test_db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
     networks:
       - test_db
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: my_pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - "8080:80"
-    depends_on:
-      - db
-    networks:
-      - test_db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d test_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  postgres_data: {}
+  postgres_data:
 
 networks:
   test_db:
-    driver: bridge
