@@ -1,13 +1,11 @@
 from sqlalchemy import String, Integer, Numeric, ForeignKey, DateTime, func, UUID, UniqueConstraint
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from typing import Optional
 from datetime import datetime
+from database import Base  # ← ВАЖНО: используем этот Base
 import uuid
 
-
-class Base(DeclarativeBase):
-    pass
 
 
 class User(Base):
@@ -16,7 +14,7 @@ class User(Base):
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, index=True, nullable=False)
-    description: Mapped[str | None] = mapped_column(String(500), nullable=True)  # ← НОВОЕ ПОЛЕ
+    description: Mapped[str | None] = mapped_column(String(500), nullable=True)  # ← НОВОЕ ПОЛе
 
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
     updated_at: Mapped[datetime | None] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
